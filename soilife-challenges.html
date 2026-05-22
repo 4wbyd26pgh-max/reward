@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>SoiLife – Challenges</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Lora:wght@600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --green-dark:  #1a5228;
+    --green-mid:   #2d7a3a;
+    --green-btn:   #2e6e3e;
+    --green-light: #eaf4ec;
+    --gold:        #c9900a;
+    --gold-light:  #f5c842;
+    --cream:       #f6f3ee;
+    --cream2:      #ede9e0;
+    --white:       #ffffff;
+    --text:        #1a2e1a;
+    --text-soft:   #5a6e5a;
+    --radius:      16px;
+    --shadow:      0 2px 14px rgba(0,0,0,.09);
+  }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--cream);
+    color: var(--text);
+    min-height: 100vh;
+    padding-bottom: 100px;
+    max-width: 480px;
+    margin: 0 auto;
+  }
+
+  /* ── NAV ── */
+  nav {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 12px 18px;
+    background: var(--white);
+    border-bottom: 1px solid #e4e0d8;
+    position: sticky; top: 0; z-index: 100;
+  }
+  .nav-logo { display: flex; align-items: center; gap: 10px; }
+  .logo-icon {
+    width: 44px; height: 44px; border-radius: 50%;
+    background: var(--green-dark);
+    display: flex; align-items: center; justify-content: center; font-size: 22px;
+  }
+  .nav-brand h1 { font-size: 19px; font-weight: 900; color: var(--green-dark); line-height: 1; }
+  .nav-brand p  { font-size: 11px; color: var(--text-soft); font-weight: 600; }
+  .nav-right { display: flex; align-items: center; gap: 8px; }
+  .lang-btn {
+    display: flex; align-items: center; gap: 5px;
+    border: 1.5px solid #ccc; border-radius: 22px;
+    padding: 6px 12px; font-size: 13px; font-weight: 700;
+    background: var(--white); cursor: pointer;
+  }
+  .mic-btn {
+    width: 40px; height: 40px; border-radius: 50%;
+    background: var(--green-dark); border: none; cursor: pointer;
+    display: flex; align-items: center; justify-content: center; font-size: 18px;
+    box-shadow: 0 2px 8px rgba(26,82,40,.35);
+  }
+
+  /* ── TABS ── */
+  .tabs {
+    display: flex;
+    background: var(--white);
+    border-bottom: 1px solid #e4e0d8;
+  }
+  .tab {
+    flex: 1; padding: 14px 0;
+    display: flex; align-items: center; justify-content: center; gap: 7px;
+    font-size: 15px; font-weight: 800; color: var(--text-soft);
+    cursor: pointer; border-bottom: 3px solid transparent;
+    transition: color .2s, border-color .2s;
+  }
+  .tab.active { color: var(--green-dark); border-bottom-color: var(--green-dark); }
+  .tab-icon { font-size: 18px; }
+
+  /* ── SECTIONS ── */
+  .page { padding: 16px 16px 0; display: flex; flex-direction: column; gap: 14px; }
+
+  /* card base */
+  .card {
+    background: var(--white);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+  }
+
+  /* ── CHALLENGE CARD ── */
+  .challenge-card { padding: 0; }
+  .challenge-inner { display: flex; gap: 12px; padding: 14px 14px 0; }
+  .challenge-img {
+    width: 130px; flex-shrink: 0; border-radius: 12px; overflow: hidden;
+    position: relative; background: #c8dfc0;
+  }
+  .challenge-img-scene {
+    width: 100%; height: 120px;
+    background: linear-gradient(180deg, #7ec8a0 0%, #4a9e6a 40%, #8bbc62 70%, #c4a44a 100%);
+    position: relative; display: flex; align-items: flex-end; overflow: hidden;
+  }
+  /* terraced hills via pseudo */
+  .terrace {
+    position: absolute; border-radius: 40% 60% 0 0;
+    background: rgba(60,120,50,.5);
+  }
+  .challenge-img-label {
+    position: absolute; top: 0; left: 0; right: 0;
+    background: var(--green-dark); color: #fff;
+    font-size: 10px; font-weight: 800; padding: 5px 8px;
+    text-align: center; letter-spacing: .3px;
+  }
+  .challenge-meta { flex: 1; display: flex; flex-direction: column; gap: 6px; }
+  .challenge-title { font-size: 16px; font-weight: 900; line-height: 1.25; }
+  .challenge-divider { height: 1px; background: #e8e4da; }
+  .challenge-steps { display: flex; align-items: center; gap: 4px; margin-top: 2px; }
+  .cstep { display: flex; flex-direction: column; align-items: center; gap: 3px; flex: 1; }
+  .cstep-icon { font-size: 22px; }
+  .cstep-label { font-size: 9px; font-weight: 700; color: var(--text-soft); text-align: center; }
+  .cstep-arrow { color: #aaa; font-size: 13px; padding-bottom: 14px; }
+
+  /* countdown */
+  .countdown-box {
+    background: var(--green-light);
+    border-radius: 12px; padding: 10px 12px;
+    display: flex; flex-direction: column; align-items: center;
+    min-width: 80px; flex-shrink: 0;
+    align-self: flex-start;
+  }
+  .countdown-label { font-size: 9px; font-weight: 700; color: var(--text-soft); margin-bottom: 4px; }
+  .countdown-days { font-size: 32px; font-weight: 900; color: var(--text); line-height: 1; }
+  .countdown-days-label { font-size: 11px; font-weight: 700; color: var(--text-soft); }
+  .countdown-end {
+    display: flex; align-items: center; gap: 4px;
+    font-size: 10px; font-weight: 700; color: var(--text-soft);
+    margin-top: 8px; border-top: 1px solid #d0ccc4; padding-top: 8px; width: 100%;
+    justify-content: center;
+  }
+
+  /* challenge row with countdown */
+  .challenge-row { display: flex; gap: 10px; padding: 14px; }
+  .challenge-content { flex: 1; }
+
+  /* see ideas btn */
+  .ideas-btn {
+    width: 100%; background: var(--green-dark); color: #fff;
+    border: none; padding: 15px;
+    display: flex; align-items: center; justify-content: space-between;
+    font-family: 'Nunito', sans-serif; font-size: 15px; font-weight: 800;
+    cursor: pointer; margin-top: 4px;
+    transition: background .2s;
+  }
+  .ideas-btn:hover { background: var(--green-mid); }
+
+  /* ── REWARDS CARD ── */
+  .rewards-card { padding: 16px; }
+  .rewards-title { display: flex; align-items: center; gap: 8px; font-size: 16px; font-weight: 900; margin-bottom: 14px; }
+  .reward-row { display: flex; align-items: center; gap: 14px; }
+  .reward-icon-circle {
+    width: 72px; height: 72px; border-radius: 50%;
+    background: var(--green-light);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 36px; flex-shrink: 0;
+  }
+  .reward-text strong { font-size: 15px; font-weight: 900; display: block; margin-bottom: 4px; }
+  .reward-text p { font-size: 12px; color: var(--text-soft); font-weight: 600; line-height: 1.5; }
+
+  /* ── PROGRESS CARD ── */
+  .progress-card { padding: 16px; }
+  .progress-header { display: flex; align-items: center; gap: 8px; font-size: 16px; font-weight: 900; margin-bottom: 14px; }
+  .progress-header .bar-icon { font-size: 20px; color: var(--green-mid); }
+
+  .progress-body { display: flex; gap: 16px; align-items: flex-start; }
+  .progress-left { min-width: 90px; }
+  .progress-pct { font-size: 38px; font-weight: 900; color: var(--green-dark); line-height: 1; }
+  .progress-label { font-size: 12px; font-weight: 700; color: var(--text-soft); margin-top: 4px; margin-bottom: 10px; }
+  .progress-bar-wrap { height: 10px; background: #ddd; border-radius: 10px; overflow: hidden; width: 100%; }
+  .progress-bar-fill { height: 100%; width: 60%; background: var(--green-dark); border-radius: 10px; }
+  .progress-steps-label { font-size: 11px; color: var(--text-soft); font-weight: 600; margin-top: 6px; }
+
+  .progress-steps { flex: 1; display: flex; align-items: center; gap: 2px; flex-wrap: nowrap; }
+  .pstep { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+  .pstep-circle {
+    width: 44px; height: 44px; border-radius: 50%;
+    background: var(--green-light); border: 2.5px solid #cde0cd;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px; position: relative;
+  }
+  .pstep-circle.done { background: var(--green-dark); border-color: var(--green-dark); }
+  .pstep-circle.active { border-color: var(--gold); background: #fff8e6; }
+  .pstep-circle .check {
+    position: absolute; bottom: -2px; right: -2px;
+    width: 16px; height: 16px; border-radius: 50%;
+    background: var(--green-mid); color: #fff;
+    font-size: 9px; display: flex; align-items: center; justify-content: center;
+    border: 2px solid #fff;
+  }
+  .pstep-circle .step-num {
+    position: absolute; bottom: -2px; right: -2px;
+    width: 16px; height: 16px; border-radius: 50%;
+    background: var(--gold); color: #fff;
+    font-size: 9px; font-weight: 900; display: flex; align-items: center; justify-content: center;
+    border: 2px solid #fff;
+  }
+  .pstep-label { font-size: 9px; font-weight: 700; color: var(--text-soft); text-align: center; }
+  .pstep-arrow { color: #bbb; font-size: 12px; padding-bottom: 16px; }
+
+  /* ── BIG CAMERA BUTTON ── */
+  .camera-section { padding: 0 16px 8px; }
+  .camera-btn {
+    width: 100%;
+    background: var(--green-dark);
+    color: #fff;
+    border: none;
+    border-radius: 20px;
+    padding: 22px 20px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 20px;
+    font-weight: 900;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center; gap: 12px;
+    box-shadow: 0 6px 24px rgba(26,82,40,.4);
+    transition: transform .15s, box-shadow .15s;
+    letter-spacing: .3px;
+  }
+  .camera-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(26,82,40,.5); }
+  .camera-btn:active { transform: scale(.98); }
+  .camera-btn-icon {
+    width: 52px; height: 52px; border-radius: 50%;
+    background: rgba(255,255,255,.18);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 26px; flex-shrink: 0;
+  }
+  .camera-btn-text { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; }
+  .camera-btn-text span { font-size: 13px; font-weight: 600; opacity: .8; }
+  .camera-sub { text-align: center; font-size: 12px; color: var(--text-soft); font-weight: 600; margin-top: 6px; }
+
+  /* ── BOTTOM NAV ── */
+  .bottom-nav {
+    position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
+    width: 100%; max-width: 480px;
+    background: var(--white);
+    border-top: 1px solid #e4e0d8;
+    display: flex; padding: 8px 0 14px;
+  }
+  .nav-item {
+    flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px;
+    cursor: pointer;
+  }
+  .nav-item-icon {
+    width: 38px; height: 38px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+  }
+  .nav-item.active .nav-item-icon { background: #e8f4ea; }
+  .nav-item span { font-size: 10px; font-weight: 700; color: var(--text-soft); }
+  .nav-item.active span { color: var(--green-dark); }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .tabs          { animation: fadeUp .35s ease both; }
+  .card          { animation: fadeUp .4s .05s ease both; }
+  .camera-section{ animation: fadeUp .4s .2s ease both; }
+
+  /* Camera pulse ring */
+  @keyframes pulse-ring {
+    0%   { box-shadow: 0 0 0 0 rgba(46,110,62,.4); }
+    70%  { box-shadow: 0 0 0 14px rgba(46,110,62,0); }
+    100% { box-shadow: 0 0 0 0 rgba(46,110,62,0); }
+  }
+  .camera-btn { animation: pulse-ring 2.5s ease-out infinite; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">
+    <div class="logo-icon">🌱</div>
+    <div class="nav-brand">
+      <h1>Name</h1>
+      <p>Better soil. Better crops. Better life.</p>
+    </div>
+  </div>
+  <div class="nav-right">
+    <button class="lang-btn">🌐 Language</button>
+    <button class="mic-btn">🔊</button>
+  </div>
+</nav>
+
+<!-- TABS -->
+<div class="tabs">
+  <div class="tab active"><span class="tab-icon">🏆</span> Challenges</div>
+  <div class="tab"><span class="tab-icon">🎁</span> Rewards</div>
+</div>
+
+<div class="page">
+
+  <!-- THIS MONTH'S CHALLENGE -->
+  <div class="card challenge-card">
+    <div class="challenge-row">
+      <!-- image -->
+      <div class="challenge-img">
+        <div class="challenge-img-scene">
+          <!-- simple SVG terraced hill scene -->
+          <svg width="130" height="120" viewBox="0 0 130 120" xmlns="http://www.w3.org/2000/svg" style="position:absolute;top:0;left:0">
+            <rect width="130" height="120" fill="#87ceaa"/>
+            <ellipse cx="65" cy="130" rx="90" ry="60" fill="#4a9e6a"/>
+            <ellipse cx="65" cy="110" rx="70" ry="45" fill="#5baf78"/>
+            <ellipse cx="65" cy="95"  rx="55" ry="35" fill="#6bbf84"/>
+            <ellipse cx="65" cy="80"  rx="40" ry="25" fill="#7dcf92"/>
+            <!-- trees -->
+            <circle cx="20" cy="55" r="10" fill="#2d7a3a"/>
+            <rect x="18" y="62" width="4" height="10" fill="#5a3d1a"/>
+            <circle cx="105" cy="48" r="8" fill="#2d7a3a"/>
+            <rect x="103" y="54" width="4" height="8" fill="#5a3d1a"/>
+            <circle cx="60" cy="38" r="7" fill="#3a8a48"/>
+            <!-- sky -->
+            <rect width="130" height="30" fill="#87ceeb" opacity=".6"/>
+            <circle cx="30" cy="15" r="10" fill="white" opacity=".7"/>
+            <circle cx="50" cy="12" r="14" fill="white" opacity=".7"/>
+          </svg>
+        </div>
+        <div class="challenge-img-label">This Month's Challenge</div>
+      </div>
+
+      <!-- content -->
+      <div class="challenge-content">
+        <div style="display:flex;gap:8px;align-items:flex-start">
+          <div style="flex:1">
+            <div style="font-size:22px;margin-bottom:4px">🌱</div>
+            <div class="challenge-title">Keep Soil<br>from Washing Away</div>
+            <div class="challenge-divider" style="margin:8px 0"></div>
+            <div class="challenge-steps">
+              <div class="cstep">
+                <div class="cstep-icon">🌱</div>
+                <div class="cstep-label">Try it</div>
+              </div>
+              <div class="cstep-arrow">→</div>
+              <div class="cstep">
+                <div class="cstep-icon">📱</div>
+                <div class="cstep-label">Show progress</div>
+              </div>
+              <div class="cstep-arrow">→</div>
+              <div class="cstep">
+                <div class="cstep-icon">💵</div>
+                <div class="cstep-label">Earn cash reward</div>
+              </div>
+            </div>
+          </div>
+          <!-- countdown -->
+          <div class="countdown-box">
+            <div class="countdown-label">Challenge ends in</div>
+            <div class="countdown-days">18</div>
+            <div class="countdown-days-label">Days</div>
+            <div class="countdown-end">📅 Ends on<br>25 May 2024</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <button class="ideas-btn">
+      See Challenge Ideas
+      <span style="font-size:20px">›</span>
+    </button>
+  </div>
+
+  <!-- REWARDS YOU CAN GET -->
+  <div class="card rewards-card">
+    <div class="rewards-title"><span>🎁</span> Rewards You Can Get</div>
+    <div class="reward-row">
+      <div class="reward-icon-circle">💵</div>
+      <div class="reward-text">
+        <strong>Cash Reward</strong>
+        <p>Top farmers who complete the challenge will receive a cash reward.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- MY CHALLENGE PROGRESS -->
+  <div class="card progress-card">
+    <div class="progress-header">
+      <span class="bar-icon">📊</span> My Challenge Progress
+    </div>
+    <div class="progress-body">
+      <div class="progress-left">
+        <div style="font-size:11px;font-weight:700;color:var(--text-soft);margin-bottom:2px">Progress</div>
+        <div class="progress-pct">60%</div>
+        <div class="progress-bar-wrap" style="margin-top:8px">
+          <div class="progress-bar-fill"></div>
+        </div>
+        <div class="progress-steps-label">3 of 5 steps completed</div>
+      </div>
+      <div class="progress-steps">
+        <div class="pstep">
+          <div class="pstep-circle done">
+            📖
+            <div class="check">✓</div>
+          </div>
+          <div class="pstep-label">Learn</div>
+        </div>
+        <div class="pstep-arrow">→</div>
+        <div class="pstep">
+          <div class="pstep-circle done">
+            🌱
+            <div class="check">✓</div>
+          </div>
+          <div class="pstep-label">Try</div>
+        </div>
+        <div class="pstep-arrow">→</div>
+        <div class="pstep">
+          <div class="pstep-circle done">
+            📷
+            <div class="check">✓</div>
+          </div>
+          <div class="pstep-label">Take Picture</div>
+        </div>
+        <div class="pstep-arrow">→</div>
+        <div class="pstep">
+          <div class="pstep-circle active">
+            📋
+            <div class="step-num">4</div>
+          </div>
+          <div class="pstep-label">Review</div>
+        </div>
+        <div class="pstep-arrow">→</div>
+        <div class="pstep">
+          <div class="pstep-circle">
+            💵
+            <div class="step-num" style="background:#aaa">5</div>
+          </div>
+          <div class="pstep-label">Reward</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- BIG CAMERA BUTTON -->
+<div style="height:16px"></div>
+<div class="camera-section">
+  <button class="camera-btn">
+    <div class="camera-btn-icon">📷</div>
+    <div class="camera-btn-text">
+      Take Picture
+      <span>Upload a photo of your progress</span>
+    </div>
+  </button>
+</div>
+
+<!-- BOTTOM NAV -->
+<div class="bottom-nav">
+  <div class="nav-item">
+    <div class="nav-item-icon">🏠</div>
+    <span>Home</span>
+  </div>
+  <div class="nav-item">
+    <div class="nav-item-icon">▶️</div>
+    <span>Watch</span>
+  </div>
+  <div class="nav-item active">
+    <div class="nav-item-icon">📷</div>
+    <span>Camera</span>
+  </div>
+  <div class="nav-item">
+    <div class="nav-item-icon">🏷️</div>
+    <span>Saved</span>
+  </div>
+  <div class="nav-item">
+    <div class="nav-item-icon">💰</div>
+    <span>Rewards</span>
+  </div>
+</div>
+
+</body>
+</html>
